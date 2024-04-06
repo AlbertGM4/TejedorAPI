@@ -17,9 +17,30 @@ namespace Tejedor.Infrastructure.Repository
             _dbContext = context;
         }
 
-        public IEnumerable<Product> GetProducts()
+        async Task<IEnumerable<Product>> IProductRepository.GetProducts()
         {
             return _dbContext.Products;
+        }
+
+        async Task<Product?> IProductRepository.GetProduct(int productID)
+        {
+            return await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == productID);
+        }
+
+        async Task IProductRepository.AddProducts(IEnumerable<Product> products)
+        {
+            _dbContext.Products.AddRange(products);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        async Task IProductRepository.UpdateProducts(IEnumerable<Product> products)
+        {
+            throw new NotImplementedException();
+        }
+
+        async Task IProductRepository.DeleteProducts(IEnumerable<Product> products)
+        {
+            throw new NotImplementedException();
         }
     }
 }

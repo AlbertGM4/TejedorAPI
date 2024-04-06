@@ -13,14 +13,13 @@ namespace Tejedor.Infrastructure.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductID { get; set; }
-        public string? Name { get; set; }
-        public float Price { get; set; }
+        public required string Name { get; set; }
+        public required decimal Price { get; set; }
         public string? Description { get; set; }
-        public int CategoryID { get; set; }
+        public required int CategoryID { get; set; }
         [ForeignKey("CategoryID")]
         public virtual Category? Category { get; set; }
-        //public virtual ICollection<Image>? Images { get; set; }
+        public virtual ICollection<Image>? Images { get; set; }
         public int Stock { get; set; }
-
     }
 }

@@ -12,8 +12,8 @@ using Tejedor.Infrastructure;
 namespace Tejedor.API.Migrations
 {
     [DbContext(typeof(TejedorDBContext))]
-    [Migration("20240328161956_InitDB")]
-    partial class InitDB
+    [Migration("20240406155315_Migrations")]
+    partial class Migrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,8 @@ namespace Tejedor.API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ImageID");
+
+                    b.HasIndex("ProductID");
 
                     b.ToTable("Images");
                 });
@@ -174,10 +176,11 @@ namespace Tejedor.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");
@@ -234,6 +237,17 @@ namespace Tejedor.API.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Tejedor.Infrastructure.Entity.Image", b =>
+                {
+                    b.HasOne("Tejedor.Infrastructure.Entity.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Tejedor.Infrastructure.Entity.Order", b =>
                 {
                     b.HasOne("Tejedor.Infrastructure.Entity.User", "Buyer")
@@ -275,6 +289,11 @@ namespace Tejedor.API.Migrations
             modelBuilder.Entity("Tejedor.Infrastructure.Entity.Order", b =>
                 {
                     b.Navigation("OrderLines");
+                });
+
+            modelBuilder.Entity("Tejedor.Infrastructure.Entity.Product", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }
