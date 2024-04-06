@@ -1,0 +1,6 @@
+@Tejedor_HostAddress = http://localhost:5188
+
+GET {{Tejedor_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
