@@ -13,7 +13,7 @@ namespace Tejedor.Infrastructure.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ImageID { get; set; }
-        public int ProductID { get; set; }
+        public required int ProductID { get; set; }
         [ForeignKey("ProductID")]
         public virtual Product? Product { get; set; }
 

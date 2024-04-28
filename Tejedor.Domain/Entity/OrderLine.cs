@@ -21,7 +21,9 @@ namespace Tejedor.Infrastructure.Entity
         public float Discount { get; set; }
         public float SubTotal { get; set; }
         public float Total { get; set; }
-
+        public required int OrderID { get; set; }
+        [ForeignKey("OrderID")]
+        public virtual Order? Order { get; set; }
 
     }
 }

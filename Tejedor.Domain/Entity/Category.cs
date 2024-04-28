@@ -13,5 +13,7 @@ namespace Tejedor.Infrastructure.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryID { get; set; }
+        public required string Name { get; set; }
+        public string? Description { get; set; }
     }
 }
