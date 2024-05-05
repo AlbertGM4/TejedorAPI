@@ -67,7 +67,7 @@ public class OrderController : ControllerBase
     /// </summary>
     /// <param name="orders"></param>
     [HttpDelete("deleteOrders")]
-    public async Task DeleteOrders(SetProductListDTO orders)
+    public async Task DeleteOrders(SetOrderListDTO orders)
     {
         await OrderRepository.DeleteOrders(new List<Order>() { (Order) orders });
     }

@@ -9,10 +9,10 @@ using Tejedor.Infrastructure.Repository.Interfaces;
 
 namespace Tejedor.Infrastructure.Repository
 {
-    public class CategorytRepository : ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly TejedorDBContext _dbContext;
-        public CategorytRepository(TejedorDBContext context) 
+        public CategoryRepository(TejedorDBContext context) 
         {
             _dbContext = context;
         }

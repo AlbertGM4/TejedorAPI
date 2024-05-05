@@ -13,9 +13,9 @@ namespace Tejedor.Infrastructure.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserID { get; set; }
-        public string? Name { get; set; }
-        public string? Email { get; set; }
-        public string? Password { get; set; }
+        public required string UserName { get; set; }
+        public required string UserEmail { get; set; }
+        public string? UserPassword { get; set; }
         public int? Points { get; set; }
         public Image? Image { get; set; }
         public string? City { get; set; }
