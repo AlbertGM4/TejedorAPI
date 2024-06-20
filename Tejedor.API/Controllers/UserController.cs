@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
+using Tejedor.Infrastructure.DTO.PromotionDTO;
 using Tejedor.Infrastructure.DTO.UserDTO;
 using Tejedor.Infrastructure.Entity;
+using Tejedor.Infrastructure.Repository;
 using Tejedor.Infrastructure.Repository.Interfaces;
 
 namespace Tejedor.API.Controllers;
@@ -45,11 +48,13 @@ public class UserController : ControllerBase
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="users"></param>
+    /// <param name="usersDtos"></param>
     [HttpPost("addUsers")]
-    public async Task AddUsers(SetUserListDTO users)
+    public async Task<IActionResult> AddUsers([FromBody] IEnumerable<SetUserListDTO> usersDtos)
     {
-        await UserRepository.AddUsers(new List<User>() { (User) users } );
+        var userEntities = usersDtos.Select(dto => (User)dto).ToList(); ;
+        await UserRepository.AddUsers(userEntities);
+        return CreatedAtAction(nameof(GetAllUsers), null);
     }
 
     /// <summary>
@@ -57,9 +62,11 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="users"></param>
     [HttpPut("updateUsers")]
-    public async Task UpdateUsers(SetUserListDTO users)
+    public async Task<IActionResult> UpdateUsers([FromBody] IEnumerable<SetUserListDTO> users)
     {
-        await UserRepository.UpdateUsers(new List<User>() { (User) users });
+        var userEntities = users.Select(x => (User)x);
+        await UserRepository.UpdateUsers(userEntities);
+        return NoContent();
     }
 
     /// <summary>
@@ -67,8 +74,11 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="users"></param>
     [HttpDelete("deleteUsers")]
-    public async Task DeleteUsers(SetUserListDTO users)
+    public async Task<IActionResult> DeleteUsers([FromBody] IEnumerable<SetUserListDTO> users)
     {
-        await UserRepository.DeleteUsers(new List<User>() { (User) users });
+        var userEntities = users.Select(x => (User)x);
+        await UserRepository.DeleteUsers(userEntities);
+        return NoContent();
     }
+
 }

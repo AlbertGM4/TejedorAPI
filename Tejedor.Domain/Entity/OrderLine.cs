@@ -13,17 +13,19 @@ namespace Tejedor.Infrastructure.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrderLineID { get; set; }
-        public string ProductName { get; set; }
-        public string ProductDescription { get; set; }
         public int Qty { get; set; }
-        public float UnitPrice { get; set; }
         public float Tax { get; set; }
         public float Discount { get; set; }
         public float SubTotal { get; set; }
         public float Total { get; set; }
+        // Order
         public required int OrderID { get; set; }
         [ForeignKey("OrderID")]
         public virtual Order? Order { get; set; }
+        //Product
+        public required int ProductID { get; set; }
+        [ForeignKey("ProductID")]
+        public virtual Product? Product { get; set; }
 
     }
 }

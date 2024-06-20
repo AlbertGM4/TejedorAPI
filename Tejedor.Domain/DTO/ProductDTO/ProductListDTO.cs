@@ -10,39 +10,47 @@ namespace Tejedor.Infrastructure.DTO.ProductDTO;
 
 public class GetProductListDTO
 {
-    public required int ProductID { get; set; }
-    public required string ProductName { get; set; }
-    public required decimal ProductPrice { get; set; }
+    public int ProductID { get; set; }
+    public required string Name { get; set; }
+    public decimal Price { get; set; }
+    public string? Description { get; set; }
+    public string? ImagesRoute { get; set; }
+    public int Stock { get; set; }
+    public int CategoryID { get; set; }
 
     public static explicit operator GetProductListDTO(Product product)
     {
-        return new GetProductListDTO()
+        return new GetProductListDTO
         {
             ProductID = product.ProductID,
-            ProductName = product.Name,
-            ProductPrice = product.Price
+            Name = product.Name,
+            Price = product.Price,
+            Description = product.Description,
+            ImagesRoute = product.ImagesRoute,
+            Stock = product.Stock,
+            CategoryID = product.CategoryID
         };
     }
 }
 public class SetProductListDTO
 {
     public required string Name { get; set; }
-    public required decimal Price { get; set; }
+    public decimal Price { get; set; }
     public string? Description { get; set; }
-    public required int CategoryID { get; set; }
-    public virtual ICollection<Image>? Images { get; set; }
+    public string? ImagesRoute { get; set; }
     public int Stock { get; set; }
+    public int CategoryID { get; set; }
 
-    public static explicit operator Product(SetProductListDTO product)
+    public static explicit operator Product(SetProductListDTO productDto)
     {
-        return new Product()
+        return new Product
         {
-            Name = product.Name,
-            Price = product.Price,
-            Description = product.Description,
-            CategoryID = product.CategoryID,
-            Images  = product.Images,
-            Stock = product.Stock,
+            Name = productDto.Name,
+            Price = productDto.Price,
+            Description = productDto.Description,
+            ImagesRoute = productDto.ImagesRoute,
+            Stock = productDto.Stock,
+            CategoryID = productDto.CategoryID
         };
     }
 }

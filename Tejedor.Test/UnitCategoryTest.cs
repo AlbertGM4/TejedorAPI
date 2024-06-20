@@ -22,7 +22,8 @@ public class CategoryTest
         {
             CategoryID = id,
             Name = "MockCategoryName",
-            Description = "This is a description"
+            Description = "This is a description",
+            ImagesRoute = "/testeoCategory"
         };
     }
 

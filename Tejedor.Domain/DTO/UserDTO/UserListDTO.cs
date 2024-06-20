@@ -10,33 +10,46 @@ namespace Tejedor.Infrastructure.DTO.UserDTO;
 
 public class GetUserListDTO
 {
-    public required int UserID { get; set; }
     public required string UserName { get; set; }
     public required string UserEmail { get; set; }
+    public string? Address { get; set; }
+    public string? BillingAddress { get; set; }
+    public string? Phone { get; set; }
+    public int? Points { get; set; }
+
 
     public static explicit operator GetUserListDTO(User user)
     {
         return new GetUserListDTO()
         {
-            UserID = user.UserID,
             UserName = user.UserName,
-            UserEmail = user.UserEmail
+            UserEmail = user.UserEmail,
+            Address = user.Address,
+            BillingAddress = user.BillingAddress,
+            Phone = user.Phone,
+            Points = user.Points,
         };
     }
 }
 public class SetUserListDTO
 {
-    public required int UserID { get; set; }
     public required string UserName { get; set; }
     public required string UserEmail { get; set; }
+    public string? Address { get; set; }
+    public string? BillingAddress { get; set; }
+    public string? Phone { get; set; }
+    public int? Points { get; set; }
 
     public static explicit operator User(SetUserListDTO user)
     {
         return new User()
         {
-            UserID = user.UserID,
             UserName = user.UserName,
-            UserEmail = user.UserEmail
+            UserEmail = user.UserEmail,
+            Address = user.Address,
+            BillingAddress = user.BillingAddress,
+            Phone = user.Phone,
+            Points = user.Points,
         };
     }
 }

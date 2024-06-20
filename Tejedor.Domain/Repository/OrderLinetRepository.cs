@@ -19,7 +19,7 @@ namespace Tejedor.Infrastructure.Repository
 
         async Task<IEnumerable<OrderLine>> IOrderLineRepository.GetOrderLines()
         {
-            return _dbContext.OrderLines;
+            return await _dbContext.OrderLines.ToListAsync();
         }
 
         async Task<OrderLine?> IOrderLineRepository.GetOrderLine(int orderLineID)
@@ -35,12 +35,14 @@ namespace Tejedor.Infrastructure.Repository
 
         async Task IOrderLineRepository.UpdateOrderLines(IEnumerable<OrderLine> orderLines)
         {
-            throw new NotImplementedException();
+            _dbContext.OrderLines.UpdateRange(orderLines);
+            await _dbContext.SaveChangesAsync();
         }
 
         async Task IOrderLineRepository.DeleteOrderLines(IEnumerable<OrderLine> orderLines)
         {
-            throw new NotImplementedException();
+            _dbContext.OrderLines.RemoveRange(orderLines);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

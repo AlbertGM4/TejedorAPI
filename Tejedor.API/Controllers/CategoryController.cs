@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Tejedor.Infrastructure.DTO.CategoryDTO;
 using Tejedor.Infrastructure.Entity;
+using Tejedor.Infrastructure.Repository;
 using Tejedor.Infrastructure.Repository.Interfaces;
 
 namespace Tejedor.API.Controllers;
@@ -27,7 +29,7 @@ public class CategoryController : ControllerBase
     [HttpGet("getCategories")]
     public async Task<IEnumerable<GetCategoryListDTO>> GetAllCategories()
     {
-        return (await CategoryRepository.GetCategories()).Select(x => (GetCategoryListDTO) x);        
+        return (await CategoryRepository.GetCategories()).Select(category => (GetCategoryListDTO) category);        
     }
 
     /// <summary>
@@ -47,9 +49,11 @@ public class CategoryController : ControllerBase
     /// </summary>
     /// <param name="categories"></param>
     [HttpPost("addCategories")]
-    public async Task AddCategories(SetCategoryListDTO categories)
+    public async Task<IActionResult> AddCategories([FromBody] IEnumerable<SetCategoryListDTO> categories)
     {
-        await CategoryRepository.AddCategories(new List<Category>() { (Category) categories } );
+        var categoryEntities = categories.Select(dto => (Category)dto).ToList();
+        await CategoryRepository.AddCategories(categoryEntities);
+        return CreatedAtAction(nameof(GetAllCategories), null);
     }
 
     /// <summary>
@@ -57,9 +61,11 @@ public class CategoryController : ControllerBase
     /// </summary>
     /// <param name="categories"></param>
     [HttpPut("updateCategories")]
-    public async Task UpdateCategories(SetCategoryListDTO categories)
+    public async Task<IActionResult> UpdateCategories([FromBody] IEnumerable<SetCategoryListDTO> categories)
     {
-        await CategoryRepository.UpdateCategories(new List<Category>() { (Category) categories });
+        var categoryEntities = categories.Select(dto => (Category)dto).ToList();
+        await CategoryRepository.UpdateCategories(categoryEntities);
+        return NoContent();
     }
 
     /// <summary>
@@ -67,8 +73,10 @@ public class CategoryController : ControllerBase
     /// </summary>
     /// <param name="categories"></param>
     [HttpDelete("deleteCategories")]
-    public async Task DeleteCategories(SetCategoryListDTO categories)
+    public async Task<IActionResult> DeleteCategories([FromBody] IEnumerable<SetCategoryListDTO> categories)
     {
-        await CategoryRepository.DeleteCategories(new List<Category>() { (Category) categories });
+        var categoryEntities = categories.Select(dto => (Category)dto).ToList();
+        await CategoryRepository.DeleteCategories(categoryEntities);
+        return NoContent();
     }
 }

@@ -8,11 +8,71 @@ using Tejedor.Infrastructure.Repository.Interfaces;
 using Tejedor.Infrastructure.DTO.ProductDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Moq;
 
 namespace TejedorTest;
 
-public class ProductTest
+public class ProductTests
 {
+    private readonly Mock<IProductRepository> _mockRepo;
+    private readonly ProductController _controller;
+
+    public ProductTests()
+    {
+        _mockRepo = new Mock<IProductRepository>();
+        _controller = new ProductController(_mockRepo.Object);
+    }
+
+    [Fact]
+    public async Task GetAllProducts_ReturnsOkResult_WithListOfProducts()
+    {
+        // Arrange
+        var products = new List<Product>
+        {
+            new Product { ProductID = 1, Name = "Product1", Price = 10, Stock = 100, CategoryID = 1 },
+            new Product { ProductID = 2, Name = "Product2", Price = 20, Stock = 200, CategoryID = 2 }
+        };
+        _mockRepo.Setup(repo => repo.GetProducts()).ReturnsAsync(products);
+
+        // Act
+        var result = await _controller.GetAllProducts();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count());
+    }
+
+    [Fact]
+    public async Task GetProduct_ReturnsNotFoundResult_WhenProductDoesNotExist()
+    {
+        // Arrange
+        _mockRepo.Setup(repo => repo.GetProduct(It.IsAny<int>())).ReturnsAsync((Product)null);
+
+        // Act
+        var result = await _controller.GetProduct(1);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task AddProducts_ReturnsCreatedAtAction()
+    {
+        // Arrange
+        var newProduct = new SetProductListDTO { Name = "NewProduct", Price = 10, Stock = 100, CategoryID = 1 };
+        var products = new List<SetProductListDTO> { newProduct };
+
+        // Act
+        var result = await _controller.AddProducts(products);
+
+        // Assert
+        Assert.IsType<CreatedAtActionResult>(result);
+    }
+
+    // Similar tests can be written for UpdateProducts and DeleteProducts
+    /// <summary>
+    /// /////////
+    /// </summary>
     const int goodProductID = 1;
     const int badProductID = 2;
 

@@ -13,22 +13,15 @@ namespace Tejedor.Infrastructure.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrderID { get; set; }
-        public required DateTime? Created { get; set; }
-        public virtual ICollection<OrderLine>? OrderLines { get; set; }
-        //Vendor Info
-        public required string VendorName { get; set; }
-        public required string OrgAddr { get; set; }
-        public required string OrgCity { get; set; }
-        public required string OrgCountry { get; set; }
-        public required string OrgZip { get; set; }
-        //Customer Info
-        public required string CustomerName { get; set; }
-        public required string DestAddr { get; set; }
-        public required string DestCity { get; set; }
-        public required string DestCountry { get; set; }
-        public required string DestZip { get; set; }
-        public User Buyer { get; set; }
-
-
+        public required DateTime Created { get; set; }
+        public decimal Subtotal { get; set; }
+        public decimal Total { get; set; }
+        public string? Status { get; set; }
+        public required int CustomerID { get; set; }
+        [ForeignKey("CustomerID")]
+        public virtual User? Customer { get; set; }
+        public int PromotionID { get; set; }
+        [ForeignKey("PromotionID")]
+        public virtual Promotion? Promotion { get; set; }
     }
 }

@@ -12,29 +12,35 @@ public class GetCategoryListDTO
 {
     public required int CategoryID { get; set; }
     public required string CategoryName { get; set; }
+    public required string CategoryDescription { get; set; }
+    public required string CategoryImagesRoute { get; set; }
 
     public static explicit operator GetCategoryListDTO(Category category)
     {
         return new GetCategoryListDTO()
         {
             CategoryID = category.CategoryID,
-            CategoryName = category.Name
+            CategoryName = category.Name,
+            CategoryDescription = category.Description,
+            CategoryImagesRoute = category.ImagesRoute,
         };
     }
 }
 public class SetCategoryListDTO
 {
-    public required string Name { get; set; }
-    public string? Description { get; set; }
     public required int CategoryID { get; set; }
+    public required string CategoryName { get; set; }
+    public required string CategoryDescription { get; set; }
+    public required string CategoryImagesRoute { get; set; }
 
     public static explicit operator Category(SetCategoryListDTO category)
     {
         return new Category()
         {
-            Name = category.Name,
-            Description = category.Description,
-            CategoryID = category.CategoryID
+            CategoryID = category.CategoryID,
+            Name = category.CategoryName,
+            Description = category.CategoryDescription,
+            ImagesRoute = category.CategoryImagesRoute,
         };
     }
 }

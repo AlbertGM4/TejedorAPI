@@ -41,4 +41,12 @@ public interface IUserRepository
     /// </summary>
     /// <param name="users"></param>
     public Task DeleteUsers(IEnumerable<User> users);
+
+    /// <summary>
+    ///     It delete all the users in the IEnumerable that 
+    ///     are in the database
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="userpassword"></param>
+    public Task<User?> LoginUser(string username, string userpassword);
 }

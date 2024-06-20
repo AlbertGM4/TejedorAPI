@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tejedor.Infrastructure.DTO.ProductDTO;
 using Tejedor.Infrastructure.Entity;
+using Tejedor.Infrastructure.Repository;
 using Tejedor.Infrastructure.Repository.Interfaces;
 
 namespace Tejedor.API.Controllers;
@@ -47,9 +48,11 @@ public class ProductController : ControllerBase
     /// </summary>
     /// <param name="products"></param>
     [HttpPost("addProducts")]
-    public async Task AddProducts(SetProductListDTO products)
+    public async Task<IActionResult> AddProducts([FromBody] IEnumerable<SetProductListDTO> products)
     {
-        await ProductRepository.AddProducts(new List<Product>() { (Product) products } );
+        var productEntities = products.Select(dto => (Product)dto).ToList();
+        await ProductRepository.AddProducts(productEntities);
+        return CreatedAtAction(nameof(GetAllProducts), null);
     }
 
     /// <summary>
@@ -57,9 +60,11 @@ public class ProductController : ControllerBase
     /// </summary>
     /// <param name="products"></param>
     [HttpPut("updateProducts")]
-    public async Task UpdateProducts(SetProductListDTO products)
+    public async Task<IActionResult> UpdateProducts([FromBody] IEnumerable<SetProductListDTO> products)
     {
-        await ProductRepository.UpdateProducts(new List<Product>() { (Product) products });
+        var productEntities = products.Select(dto => (Product)dto).ToList();
+        await ProductRepository.UpdateProducts(productEntities);
+        return NoContent();
     }
 
     /// <summary>
@@ -67,8 +72,10 @@ public class ProductController : ControllerBase
     /// </summary>
     /// <param name="products"></param>
     [HttpDelete("deleteProducts")]
-    public async Task DeleteProducts(SetProductListDTO products)
+    public async Task<IActionResult> DeleteProducts([FromBody] IEnumerable<SetProductListDTO> products)
     {
-        await ProductRepository.DeleteProducts(new List<Product>() { (Product) products });
+        var productEntities = products.Select(dto => (Product)dto).ToList();
+        await ProductRepository.DeleteProducts(productEntities);
+        return NoContent();
     }
 }

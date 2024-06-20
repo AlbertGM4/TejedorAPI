@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tejedor.Infrastructure.DTO.OrderLineDTO;
 using Tejedor.Infrastructure.Entity;
+using Tejedor.Infrastructure.Repository;
 using Tejedor.Infrastructure.Repository.Interfaces;
 
 namespace Tejedor.API.Controllers;
@@ -47,9 +48,11 @@ public class OrderLineController : ControllerBase
     /// </summary>
     /// <param name="orderLines"></param>
     [HttpPost("addOrderLines")]
-    public async Task AddOrderLines(SetOrderLineListDTO orderLines)
+    public async Task<IActionResult> AddOrderLines([FromBody] IEnumerable<SetOrderLineListDTO> orderLines)
     {
-        await OrderLineRepository.AddOrderLines(new List<OrderLine>() { (OrderLine)orderLines } );
+        var orderLineEntities = orderLines.Select(dto => (OrderLine)dto).ToList();
+        await OrderLineRepository.AddOrderLines(orderLineEntities);
+        return CreatedAtAction(nameof(GetAllOrderLines), null);
     }
 
     /// <summary>
@@ -57,9 +60,11 @@ public class OrderLineController : ControllerBase
     /// </summary>
     /// <param name="orderLines"></param>
     [HttpPut("updateOrderLines")]
-    public async Task UpdateProducts(SetOrderLineListDTO orderLines)
+    public async Task<IActionResult> UpdateOrderLines([FromBody] IEnumerable<SetOrderLineListDTO> orderLines)
     {
-        await OrderLineRepository.UpdateOrderLines(new List<OrderLine>() { (OrderLine)orderLines });
+        var orderLineEntities = orderLines.Select(dto => (OrderLine)dto).ToList();
+        await OrderLineRepository.UpdateOrderLines(orderLineEntities);
+        return NoContent();
     }
 
     /// <summary>
@@ -67,8 +72,10 @@ public class OrderLineController : ControllerBase
     /// </summary>
     /// <param name="orderLines"></param>
     [HttpDelete("deleteOrderLines")]
-    public async Task DeleteProducts(SetOrderLineListDTO orderLines)
+    public async Task<IActionResult> DeleteOrderLines([FromBody] IEnumerable<SetOrderLineListDTO> orderLines)
     {
-        await OrderLineRepository.DeleteOrderLines(new List<OrderLine>() { (OrderLine)orderLines });
+        var orderLineEntities = orderLines.Select(dto => (OrderLine)dto).ToList();
+        await OrderLineRepository.DeleteOrderLines(orderLineEntities);
+        return NoContent();
     }
 }

@@ -19,12 +19,12 @@ namespace Tejedor.Infrastructure.Repository
 
         async Task<IEnumerable<Order>> IOrderRepository.GetOrders()
         {
-            return _dbContext.Orders;
+            return await _dbContext.Orders.ToListAsync(); ;
         }
 
         async Task<Order?> IOrderRepository.GetOrder(int orderID)
         {
-            return await _dbContext.Orders.FirstOrDefaultAsync(x => x.OrderID == orderID);
+            return await _dbContext.Orders.FirstOrDefaultAsync(order_id => order_id.OrderID == orderID);
         }
 
         async Task IOrderRepository.AddOrders(IEnumerable<Order> orders)
@@ -35,12 +35,14 @@ namespace Tejedor.Infrastructure.Repository
 
         async Task IOrderRepository.UpdateOrders(IEnumerable<Order> orders)
         {
-            throw new NotImplementedException();
+            _dbContext.Orders.UpdateRange(orders);
+            await _dbContext.SaveChangesAsync();
         }
 
         async Task IOrderRepository.DeleteOrders(IEnumerable<Order> orders)
         {
-            throw new NotImplementedException();
+            _dbContext.Orders.RemoveRange(orders);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

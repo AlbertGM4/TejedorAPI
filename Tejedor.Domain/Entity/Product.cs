@@ -15,11 +15,12 @@ namespace Tejedor.Infrastructure.Entity
         public int ProductID { get; set; }
         public required string Name { get; set; }
         public required decimal Price { get; set; }
-        public string? Description { get; set; }
+        public string? Description { get; set; }  
+        public string? ImagesRoute { get; set; }
+        public int Stock { get; set; }
+        // Category
         public required int CategoryID { get; set; }
         [ForeignKey("CategoryID")]
         public virtual Category? Category { get; set; }
-        public virtual ICollection<Image>? Images { get; set; }
-        public int Stock { get; set; }
     }
 }

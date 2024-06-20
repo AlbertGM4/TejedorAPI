@@ -19,7 +19,7 @@ namespace Tejedor.Infrastructure.Repository
 
         async Task<IEnumerable<User>> IUserRepository.GetUsers()
         {
-            return _dbContext.Users;
+            return await _dbContext.Users.ToListAsync();
         }
 
         async Task<User?> IUserRepository.GetUser(int userID)
@@ -35,12 +35,22 @@ namespace Tejedor.Infrastructure.Repository
 
         async Task IUserRepository.UpdateUsers(IEnumerable<User> users)
         {
-            throw new NotImplementedException();
+            _dbContext.Users.UpdateRange(users);
+            await _dbContext.SaveChangesAsync();
         }
 
         async Task IUserRepository.DeleteUsers(IEnumerable<User> users)
         {
-            throw new NotImplementedException();
+            _dbContext.Users.RemoveRange(users);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        // Implementa este método para obtener el usuario de la base de datos
+        public async Task<User?> LoginUser(string username, string password)
+        {
+            // Aquí debes implementar la lógica para obtener el usuario de tu base de datos
+            // Este es solo un ejemplo simplificado
+            return await _dbContext.Users.SingleOrDefaultAsync(u => u.UserName == username && u.UserPassword == password);
         }
     }
 }

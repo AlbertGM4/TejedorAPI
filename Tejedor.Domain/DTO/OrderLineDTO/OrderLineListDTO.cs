@@ -11,56 +11,50 @@ namespace Tejedor.Infrastructure.DTO.OrderLineDTO;
 public class GetOrderLineListDTO
 {
     public required int OrderLineID { get; set; }
-    public required string ProductName { get; set; }
-    public required int Qty { get; set; }
-    public required float UnitPrice { get; set; }
-    public required float Tax { get; set; }
-    public required float Discount { get; set; }
-    public required float SubTotal { get; set; }
-    public required float Total { get; set; }
+    public int Qty { get; set; }
+    public float Tax { get; set; }
+    public float Discount { get; set; }
+    public float SubTotal { get; set; }
+    public float Total { get; set; }
     public required int OrderID { get; set; }
+    public required int ProductID { get; set; }
 
     public static explicit operator GetOrderLineListDTO(OrderLine orderLine)
     {
         return new GetOrderLineListDTO()
         {
             OrderLineID = orderLine.OrderLineID,
-            ProductName = orderLine.ProductName,
             Qty = orderLine.Qty,
-            UnitPrice = orderLine.UnitPrice,
             Tax = orderLine.Tax,
             Discount = orderLine.Discount,
             SubTotal = orderLine.SubTotal,
             Total = orderLine.Total,
-            OrderID = orderLine.OrderID
+            OrderID = orderLine.OrderID,
+            ProductID = orderLine.ProductID
         };
     }
 }
 public class SetOrderLineListDTO
 {
-    public required int OrderLineID { get; set; }
-    public required string ProductName { get; set; }
-    public required int Qty { get; set; }
-    public required float UnitPrice { get; set; }
-    public required float Tax { get; set; }
-    public required float Discount { get; set; }
-    public required float SubTotal { get; set; }
-    public required float Total { get; set; }
+    public int Qty { get; set; }
+    public float Tax { get; set; }
+    public float Discount { get; set; }
+    public float SubTotal { get; set; }
+    public float Total { get; set; }
     public required int OrderID { get; set; }
+    public required int ProductID { get; set; }
 
     public static explicit operator OrderLine(SetOrderLineListDTO orderLine)
     {
         return new OrderLine()
         {
-            OrderLineID = orderLine.OrderLineID,
-            ProductName = orderLine.ProductName,
             Qty = orderLine.Qty,
-            UnitPrice = orderLine.UnitPrice,
             Tax = orderLine.Tax,
             Discount = orderLine.Discount,
             SubTotal = orderLine.SubTotal,
             Total = orderLine.Total,
-            OrderID = orderLine.OrderID
+            OrderID = orderLine.OrderID,
+            ProductID = orderLine.ProductID
         };
     }
 }

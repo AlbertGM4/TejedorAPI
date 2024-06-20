@@ -19,7 +19,7 @@ namespace Tejedor.Infrastructure.Repository
 
         async Task<IEnumerable<Product>> IProductRepository.GetProducts()
         {
-            return _dbContext.Products;
+            return await _dbContext.Products.ToListAsync();
         }
 
         async Task<Product?> IProductRepository.GetProduct(int productID)
@@ -35,12 +35,14 @@ namespace Tejedor.Infrastructure.Repository
 
         async Task IProductRepository.UpdateProducts(IEnumerable<Product> products)
         {
-            throw new NotImplementedException();
+            _dbContext.Products.UpdateRange(products);
+            await _dbContext.SaveChangesAsync();
         }
 
         async Task IProductRepository.DeleteProducts(IEnumerable<Product> products)
         {
-            throw new NotImplementedException();
+            _dbContext.Products.RemoveRange(products);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

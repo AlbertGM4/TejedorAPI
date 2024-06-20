@@ -22,18 +22,7 @@ public class OrderTest
         {
             OrderID = id,
             Created = DateTime.Now,
-            // OrderLines?
-            VendorName = "MockVendorName",
-            OrgAddr = "OrgAddr", 
-            OrgCity = "OrgCity",
-            OrgCountry = "OrgCountry",
-            OrgZip = "OrgZip",
-            CustomerName = "MockCustomerName",
-            DestAddr = "DestAddr",
-            DestCity = "DestCity",
-            DestCountry = "DestCountry",
-            DestZip = "DestZip",
-            //Buyer?
+            CustomerID = 1
         };
     }
 

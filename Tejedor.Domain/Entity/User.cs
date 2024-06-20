@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace Tejedor.Infrastructure.Entity
 {
@@ -16,13 +14,14 @@ namespace Tejedor.Infrastructure.Entity
         public required string UserName { get; set; }
         public required string UserEmail { get; set; }
         public string? UserPassword { get; set; }
+        public string? Phone { get; set; }
+        public string? ProfileImageRoute { get; set; }
         public int? Points { get; set; }
-        public Image? Image { get; set; }
+        public string? Address { get; set; }
+        public string? BillingAddress { get; set; }
         public string? City { get; set; }
         public string? Region { get; set; }
         public string? PostalCode { get; set; }
         public string? Country { get; set; }
-        public string? Phone { get; set; }
-
     }
 }

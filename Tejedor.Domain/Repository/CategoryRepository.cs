@@ -12,14 +12,14 @@ namespace Tejedor.Infrastructure.Repository
     public class CategoryRepository : ICategoryRepository
     {
         private readonly TejedorDBContext _dbContext;
-        public CategoryRepository(TejedorDBContext context) 
+        public CategoryRepository(TejedorDBContext context)
         {
             _dbContext = context;
         }
 
         async Task<IEnumerable<Category>> ICategoryRepository.GetCategories()
         {
-            return _dbContext.Categories;
+            return await _dbContext.Categories.ToListAsync();
         }
 
         async Task<Category?> ICategoryRepository.GetCategory(int categoryID)
@@ -29,18 +29,20 @@ namespace Tejedor.Infrastructure.Repository
 
         async Task ICategoryRepository.AddCategories(IEnumerable<Category> categories)
         {
-            _dbContext.Categories.AddRange(categories);
+            await _dbContext.Categories.AddRangeAsync(categories);
             await _dbContext.SaveChangesAsync();
         }
 
         async Task ICategoryRepository.UpdateCategories(IEnumerable<Category> categories)
         {
-            throw new NotImplementedException();
+            _dbContext.Categories.UpdateRange(categories);
+            await _dbContext.SaveChangesAsync();
         }
 
         async Task ICategoryRepository.DeleteCategories(IEnumerable<Category> categories)
         {
-            throw new NotImplementedException();
+            _dbContext.Categories.RemoveRange(categories);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

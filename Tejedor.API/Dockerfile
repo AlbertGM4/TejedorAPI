@@ -1,27 +1,31 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your 
+#images for faster debugging.
 
-#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
+#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may
+#need to be changed.
+
 #For more information, please see https://aka.ms/containercompat
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-1809 AS base
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-1809 AS build
-ARG BUILD_CONFIGURATION=Release
+# Usa la imagen del SDK de .NET Core para construir la aplicación
+FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2019 AS build
 WORKDIR /src
-COPY ["Tejedor.csproj", "."]
-RUN dotnet restore "./Tejedor.csproj"
-COPY . .
-WORKDIR "/src/."
-RUN dotnet build "./Tejedor.csproj" -c %BUILD_CONFIGURATION% -o /app/build
 
+# Copia el archivo de proyecto y restaura las dependencias
+COPY Tejedor.API/Tejedor.API.csproj Tejedor.API/
+RUN dotnet restore Tejedor.API/Tejedor.API.csproj
+
+# Copia el resto de los archivos de la aplicación y construye el proyecto
+COPY Tejedor.API/. Tejedor.API/
+WORKDIR /src/Tejedor.API
+RUN dotnet build Tejedor.API.csproj -c Release -o /app/build
+
+# Publica la aplicación
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Tejedor.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
+RUN dotnet publish Tejedor.API.csproj -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+# Usa la imagen de ASP.NET Core para ejecutar la aplicación
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-windowsservercore-ltsc2019 AS base
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Tejedor.dll"]
+EXPOSE 8080
+EXPOSE 8081

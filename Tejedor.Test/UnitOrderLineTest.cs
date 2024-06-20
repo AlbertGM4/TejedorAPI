@@ -1,86 +1,73 @@
-using static System.Net.Mime.MediaTypeNames;
-using System.Diagnostics;
-using System.Xml.Linq;
-using Tejedor.Infrastructure.Entity;
-using Tejedor.API.Controllers;
-using Tejedor.Infrastructure.Repository;
-using Tejedor.Infrastructure.Repository.Interfaces;
-using Tejedor.Infrastructure.DTO.OrderLineDTO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Moq;
+using Tejedor.API.Controllers;
+using Tejedor.Infrastructure.DTO.OrderLineDTO;
+using Tejedor.Infrastructure.Entity;
+using Tejedor.Infrastructure.Repository.Interfaces;
+using Xunit;
 
 namespace TejedorTest;
 
-public class OrderLineTest
+public class OrderLineTests
 {
-    const int goodOrderLineID = 1;
-    const int badOrderLineID = 2;
+    private readonly Mock<IOrderLineRepository> _mockRepo;
+    private readonly OrderLineController _controller;
 
-    public OrderLine MockOrderLine(int id)
+    public OrderLineTests()
     {
-        return new OrderLine()
+        _mockRepo = new Mock<IOrderLineRepository>();
+        _controller = new OrderLineController(_mockRepo.Object);
+    }
+
+    [Fact]
+    public async Task GetAllOrderLines_ReturnsOkResult_WithListOfOrderLines()
+    {
+        // Arrange
+        var orderLines = new List<OrderLine>
         {
-            OrderLineID = id,
-            ProductName = "MockOrderLineName",
-            Qty = 10,
-            UnitPrice = 5f,
-            Tax = 21f,
-            Discount = 0f,
-            SubTotal = 100f,
-            Total = 110f,
-            OrderID = 10
+            new OrderLine { OrderLineID = 1, Qty = 1, Tax = 0.1f, Discount = 0.05f, SubTotal = 10, Total = 11, OrderID = 1, ProductID = 1 },
+            new OrderLine { OrderLineID = 2, Qty = 2, Tax = 0.2f, Discount = 0.1f, SubTotal = 20, Total = 22, OrderID = 2, ProductID = 2 }
         };
+        _mockRepo.Setup(repo => repo.GetOrderLines()).ReturnsAsync(orderLines);
+
+        // Act
+        var result = await _controller.GetAllOrderLines();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count());
     }
 
     [Fact]
-    public async Task GetOrderLineTest()
+    public async Task GetOrderLine_ReturnsNotFoundResult_WhenOrderLineDoesNotExist()
     {
-        //Init vars
-        Moq.Mock<IOrderLineRepository> IOrderLineRepositoryMock = new();
+        // Arrange
+        _mockRepo.Setup(repo => repo.GetOrderLine(It.IsAny<int>())).ReturnsAsync((OrderLine)null);
 
-        OrderLine goodOrderLine = MockOrderLine(goodOrderLineID);
-        OrderLine badProduct = MockOrderLine(badOrderLineID);
+        // Act
+        var result = await _controller.GetOrderLine(1);
 
-        // Good OrderLineID 
-        IOrderLineRepositoryMock.Setup(x => x.GetOrderLine(goodOrderLineID)).Returns(async () => goodOrderLine);
-        OrderLineController goodOrderLineController = new(IOrderLineRepositoryMock.Object);
-        GetOrderLineListDTO goodReceivedProduct = (await goodOrderLineController.GetOrderLine(goodOrderLineID)).Value!;
-
-        Assert.Equal(goodOrderLine.OrderLineID, goodReceivedProduct.OrderLineID);
-
-        // Bad OrderLineID
-        IOrderLineRepositoryMock.Setup(x => x.GetOrderLine(badOrderLineID)).Returns(async () => badProduct);
-        OrderLineController badProductController = new(IOrderLineRepositoryMock.Object);
-        GetOrderLineListDTO receivedProduct = (await badProductController.GetOrderLine(badOrderLineID)).Value!;
-
-        Assert.Equal(badProduct.OrderLineID, receivedProduct.OrderLineID);
+        // Assert
+        Assert.IsType<NotFoundResult>(result.Result);
     }
 
     [Fact]
-    public async Task NotGetOrderLineTest()
+    public async Task AddOrderLines_ReturnsCreatedAtAction()
     {
-        //Init vars
-        Moq.Mock<IOrderLineRepository> IOrderLineRepositoryMock = new();
+        // Arrange
+        var newOrderLine = new SetOrderLineListDTO { Qty = 1, Tax = 0.1f, Discount = 0.05f, SubTotal = 10, Total = 11, OrderID = 1, ProductID = 1 };
+        var orderLines = new List<SetOrderLineListDTO> { newOrderLine };
 
-        // Not ProductID
-        IOrderLineRepositoryMock.Setup(x => x.GetOrderLine(-1)).Returns(async() => null);
+        // Act
+        var result = await _controller.AddOrderLines(orderLines);
 
-        OrderLineController notOrderLineController = new(IOrderLineRepositoryMock.Object);
-        ActionResult<GetOrderLineListDTO> notReceivedOrderLine = (await notOrderLineController.GetOrderLine(-1));
-
-        Assert.IsType<NotFoundResult>(notReceivedOrderLine.Result);
+        // Assert
+        Assert.IsType<CreatedAtActionResult>(result);
     }
 
-    [Fact]
-    public void GetPrice()
-    {
-        //Precio positivo / precio negativo
-    }
-
-    [Fact]
-    public void GetCategory()
-    {
-        //IDCategory positivo / IDCategory negativo
-    }
+    // Similar tests can be written for UpdateOrderLines and DeleteOrderLines
 
 }

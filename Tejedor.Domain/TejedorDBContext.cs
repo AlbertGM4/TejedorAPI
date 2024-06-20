@@ -14,10 +14,10 @@ public class TejedorDBContext : DbContext
     {
 
     }
-    public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
-    public DbSet<Image> Images { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderLine> OrderLines { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Promotion> Promotions { get; set; }
     public DbSet<User> Users { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tejedor.Infrastructure.DTO.OrderDTO;
 using Tejedor.Infrastructure.Entity;
+using Tejedor.Infrastructure.Repository;
 using Tejedor.Infrastructure.Repository.Interfaces;
 
 namespace Tejedor.API.Controllers;
@@ -25,9 +26,9 @@ public class OrderController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("getOrders")]
-    public async Task<IEnumerable<GetOrderListDTO>> GetAllorders()
+    public async Task<IEnumerable<GetOrderListDTO>> GetAllOrders()
     {
-        return (await OrderRepository.GetOrders()).Select(x => (GetOrderListDTO) x);        
+        return (await OrderRepository.GetOrders()).Select(order => (GetOrderListDTO) order);        
     }
 
     /// <summary>
@@ -47,9 +48,11 @@ public class OrderController : ControllerBase
     /// </summary>
     /// <param name="orders"></param>
     [HttpPost("addOrders")]
-    public async Task AddOrders(SetOrderListDTO orders)
+    public async Task<IActionResult> AddOrders([FromBody] IEnumerable<SetOrderListDTO> orders)
     {
-        await OrderRepository.AddOrders(new List<Order>() { (Order) orders } );
+        var orderEntities = orders.Select(dto => (Order)dto).ToList();
+        await OrderRepository.AddOrders(orderEntities);
+        return CreatedAtAction(nameof(GetAllOrders), null);
     }
 
     /// <summary>
@@ -57,9 +60,11 @@ public class OrderController : ControllerBase
     /// </summary>
     /// <param name="orders"></param>
     [HttpPut("updateOrders")]
-    public async Task UpdateProducts(SetOrderListDTO orders)
+    public async Task<IActionResult> UpdateOrders([FromBody] IEnumerable<SetOrderListDTO> orders)
     {
-        await OrderRepository.UpdateOrders(new List<Order>() { (Order) orders });
+        var orderEntities = orders.Select(dto => (Order)dto).ToList();
+        await OrderRepository.UpdateOrders(orderEntities);
+        return NoContent();
     }
 
     /// <summary>
@@ -67,8 +72,10 @@ public class OrderController : ControllerBase
     /// </summary>
     /// <param name="orders"></param>
     [HttpDelete("deleteOrders")]
-    public async Task DeleteOrders(SetOrderListDTO orders)
+    public async Task<IActionResult> DeleteOrders([FromBody] IEnumerable<SetOrderListDTO> orders)
     {
-        await OrderRepository.DeleteOrders(new List<Order>() { (Order) orders });
+        var orderEntities = orders.Select(dto => (Order)dto).ToList();
+        await OrderRepository.DeleteOrders(orderEntities);
+        return NoContent();
     }
 }
