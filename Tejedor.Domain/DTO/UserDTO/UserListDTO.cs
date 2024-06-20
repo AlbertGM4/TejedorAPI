@@ -17,7 +17,7 @@ public class GetUserListDTO
     public string? Address { get; set; }
     public string? BillingAddress { get; set; }
     public string? Phone { get; set; }
-    public int? Points { get; set; }
+    public int? ACoins { get; set; }
 
 
     public static explicit operator GetUserListDTO(User user)
@@ -31,7 +31,7 @@ public class GetUserListDTO
             Address = user.Address,
             BillingAddress = user.BillingAddress,
             Phone = user.Phone,
-            Points = user.Points,
+            ACoins = user.ACoins,
         };
     }
 }
@@ -44,7 +44,7 @@ public class SetUserListDTO
     public string? Address { get; set; }
     public string? BillingAddress { get; set; }
     public string? Phone { get; set; }
-    public int? Points { get; set; }
+    public int? ACoins { get; set; }
 
     public static explicit operator User(SetUserListDTO user)
     {
@@ -57,7 +57,7 @@ public class SetUserListDTO
             Address = user.Address,
             BillingAddress = user.BillingAddress,
             Phone = user.Phone,
-            Points = user.Points,
+            ACoins = user.ACoins,
         };
     }
 }

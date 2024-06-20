@@ -16,7 +16,7 @@ namespace Tejedor.Infrastructure.Entity
         public string? UserPassword { get; set; }
         public string? Phone { get; set; }
         public string? ProfileImageRoute { get; set; }
-        public int? Points { get; set; }
+        public int? ACoins { get; set; }
         public string? Address { get; set; }
         public string? BillingAddress { get; set; }
         public string? City { get; set; }
