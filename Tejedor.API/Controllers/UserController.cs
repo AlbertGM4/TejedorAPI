@@ -76,6 +76,7 @@ public class UserController : ControllerBase
         }
 
         // Actualiza los campos del usuario con los nuevos valores
+        user.ProfileImageRoute = updateUserDto.ProfileImageRoute ?? user.ProfileImageRoute;
         user.UserName = updateUserDto.UserName ?? user.UserName;
         user.UserEmail = updateUserDto.UserEmail ?? user.UserEmail;
         user.Address = updateUserDto.Address ?? user.Address;
