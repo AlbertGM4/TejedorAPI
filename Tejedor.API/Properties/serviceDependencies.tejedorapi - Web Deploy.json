@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "apis1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/TejedorAPI/apis/TejedorAPI",
+      "type": "apis.azure"
+    },
+    "mssql1": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/tejedorserver/databases/tejedorbd",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:TejedorConnection",
+      "dynamicId": null
+    }
+  }
+}

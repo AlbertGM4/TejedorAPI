@@ -34,6 +34,9 @@ builder.Services.AddDbContext<TejedorDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TejedorConnection"), options => options.MigrationsAssembly("Tejedor.API"));
 });
 
+
+
+
 // Service Injection
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
@@ -65,6 +68,12 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<TejedorDBContext>();
+    db.Database.Migrate();
+};
+
 // First Migration
 //using (var scope = app.Services.CreateScope())
 //{
@@ -73,9 +82,9 @@ var app = builder.Build();
 //}
 
 // Configure the HTTP request pipeline.
+app.UseSwagger();
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors("AllowOrigin"); // Aplicar política CORS en desarrollo
 }
