@@ -82,7 +82,7 @@ public class UserController : ControllerBase
         user.Address = updateUserDto.Address ?? user.Address;
         user.BillingAddress = updateUserDto.BillingAddress ?? user.BillingAddress;
         user.Phone = updateUserDto.Phone ?? user.Phone;
-        user.ACoins = updateUserDto.Points.HasValue ? updateUserDto.Points.Value : user.ACoins;
+        user.ACoins = updateUserDto.ACoins.HasValue ? updateUserDto.ACoins.Value : user.ACoins;
 
         // Guarda los cambios en la base de datos
         var result = await UserRepository.UpdateUser(user);
