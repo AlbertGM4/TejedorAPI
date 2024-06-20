@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Tejedor.Infrastructure.DTO.CategoryDTO;
 using Tejedor.Infrastructure.DTO.PromotionDTO;
 using Tejedor.Infrastructure.DTO.UserDTO;
 using Tejedor.Infrastructure.Entity;
@@ -9,6 +11,7 @@ using Tejedor.Infrastructure.Repository.Interfaces;
 namespace Tejedor.API.Controllers;
 
 [ApiController]
+//[Authorize]
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
@@ -36,12 +39,12 @@ public class UserController : ControllerBase
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="userID"></param>
+    /// <param name="Authorization"></param>
     /// <returns></returns>
-    [HttpGet("getUser/({userID})")]
-    public async Task<ActionResult<GetUserListDTO>> GetUser([FromRoute] int userID)
+    [HttpGet("getUser")]
+    public async Task<ActionResult<GetUserListDTO>> GetUser([FromHeader] string Authorization)
     {
-        var getUser = await UserRepository.GetUser(userID);
+        var getUser = await UserRepository.GetUser(Authorization);
         return getUser != null ? (GetUserListDTO)getUser : NotFound();
     }
 
@@ -55,6 +58,40 @@ public class UserController : ControllerBase
         var userEntities = usersDtos.Select(dto => (User)dto).ToList(); ;
         await UserRepository.AddUsers(userEntities);
         return CreatedAtAction(nameof(GetAllUsers), null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userID"></param>
+    [HttpPut("updateUser/{userID}")]
+    public async Task<IActionResult> UpdateUser([FromRoute] int userID, [FromBody] GetUserListDTO updateUserDto)
+    {
+        // Encuentra el usuario en la base de datos
+        var user = await UserRepository.GetUser(userID);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        // Actualiza los campos del usuario con los nuevos valores
+        user.UserName = updateUserDto.UserName ?? user.UserName;
+        user.UserEmail = updateUserDto.UserEmail ?? user.UserEmail;
+        user.Address = updateUserDto.Address ?? user.Address;
+        user.BillingAddress = updateUserDto.BillingAddress ?? user.BillingAddress;
+        user.Phone = updateUserDto.Phone ?? user.Phone;
+        user.Points = updateUserDto.Points.HasValue ? updateUserDto.Points.Value : user.Points;
+
+        // Guarda los cambios en la base de datos
+        var result = await UserRepository.UpdateUser(user);
+
+        if (result)
+        {
+            return NoContent(); // 204 No Content
+        }
+
+        return StatusCode(500, "Un error ocurrió al actualizar el usuario");
     }
 
     /// <summary>

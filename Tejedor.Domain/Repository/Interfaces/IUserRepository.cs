@@ -20,6 +20,13 @@ public interface IUserRepository
     /// </summary>
     /// <param name="userID"> Id of the prodcut to search </param>
     /// <returns> Return the Product, if not, returns null </returns>
+    public Task<User?> GetUser(string userID);
+
+    /// <summary>
+    ///     It search for a user by the ID in the parameters
+    /// </summary>
+    /// <param name="userID"> Id of the prodcut to search </param>
+    /// <returns> Return the Product, if not, returns null </returns>
     public Task<User?> GetUser(int userID);
 
     /// <summary>
@@ -27,6 +34,13 @@ public interface IUserRepository
     /// </summary>
     /// <param name="users"></param>
     public Task AddUsers(IEnumerable<User> users);
+
+    /// <summary>
+    ///     It updates all the users in the IEnumerable that 
+    ///     are in the database
+    /// </summary>
+    /// <param name="user"></param>
+    public Task<bool> UpdateUser(User user);
 
     /// <summary>
     ///     It updates all the users in the IEnumerable that 
@@ -49,4 +63,5 @@ public interface IUserRepository
     /// <param name="username"></param>
     /// <param name="userpassword"></param>
     public Task<User?> LoginUser(string username, string userpassword);
+    
 }

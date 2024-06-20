@@ -47,10 +47,10 @@ public class UserTests
     public async Task GetUser_ReturnsNotFoundResult_WhenUserDoesNotExist()
     {
         // Arrange
-        _mockRepo.Setup(repo => repo.GetUser(It.IsAny<int>())).ReturnsAsync((User)null);
+        _mockRepo.Setup(repo => repo.GetUser(It.IsAny<string>())).ReturnsAsync((User?)null);
 
         // Act
-        var result = await _controller.GetUser(1);
+        var result = await _controller.GetUser("Pepe");
 
         // Assert
         Assert.IsType<NotFoundResult>(result.Result);

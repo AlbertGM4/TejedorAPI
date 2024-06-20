@@ -22,15 +22,27 @@ namespace Tejedor.Infrastructure.Repository
             return await _dbContext.Users.ToListAsync();
         }
 
-        async Task<User?> IUserRepository.GetUser(int userID)
+        async Task<User?> IUserRepository.GetUser(string UserName)
         {
-            return await _dbContext.Users.FirstOrDefaultAsync(x => x.UserID == userID);
+            return await _dbContext.Users.FirstOrDefaultAsync(x => x.UserName == UserName);
+        }
+
+        async Task<User?> IUserRepository.GetUser(int UserID)
+        {
+            return await _dbContext.Users.FirstOrDefaultAsync(x => x.UserID == UserID);
         }
 
         async Task IUserRepository.AddUsers(IEnumerable<User> users)
         {
             _dbContext.Users.AddRange(users);
             await _dbContext.SaveChangesAsync();
+        }
+
+        async Task<bool> IUserRepository.UpdateUser(User user)
+        {
+            _dbContext.Users.Update(user);
+            var changes = await _dbContext.SaveChangesAsync();
+            return changes > 0;
         }
 
         async Task IUserRepository.UpdateUsers(IEnumerable<User> users)
