@@ -10,12 +10,12 @@ namespace Tejedor.Infrastructure.DTO.ProductDTO;
 
 public class GetProductListDTO
 {
-    public int ProductID { get; set; }
-    public required string Name { get; set; }
-    public decimal Price { get; set; }
-    public string? Description { get; set; }
-    public string? ImagesRoute { get; set; }
-    public int Stock { get; set; }
+    public required int ProductID { get; set; }
+    public required string ProductName { get; set; }
+    public string? ProductDescription { get; set; }
+    public decimal ProductPrice { get; set; }    
+    public string? ProductImagesRoute { get; set; }
+    public int ProductStock { get; set; }
     public int CategoryID { get; set; }
 
     public static explicit operator GetProductListDTO(Product product)
@@ -23,11 +23,11 @@ public class GetProductListDTO
         return new GetProductListDTO
         {
             ProductID = product.ProductID,
-            Name = product.Name,
-            Price = product.Price,
-            Description = product.Description,
-            ImagesRoute = product.ImagesRoute,
-            Stock = product.Stock,
+            ProductName = product.Name,
+            ProductPrice = product.Price,
+            ProductDescription = product.Description,
+            ProductImagesRoute = product.ImagesRoute,
+            ProductStock = product.Stock,
             CategoryID = product.CategoryID
         };
     }
