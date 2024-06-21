@@ -36,8 +36,8 @@ public class ProductController : ControllerBase
     /// </summary>
     /// <param name="productID"></param>
     /// <returns></returns>
-    [HttpGet("getProduct/({productID})")]
-    public async Task<ActionResult<GetProductListDTO>> GetProduct([FromRoute] int productID)
+    [HttpGet("getProduct/{productID}")]
+    public async Task<ActionResult<GetProductListDTO>> GetProduct(int productID)
     {
         var getProduct = await ProductRepository.GetProduct(productID);
         return getProduct != null ? (GetProductListDTO)getProduct : NotFound();
