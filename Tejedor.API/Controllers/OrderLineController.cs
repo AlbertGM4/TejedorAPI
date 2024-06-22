@@ -25,10 +25,10 @@ public class OrderLineController : ControllerBase
     /// 
     /// </summary>
     /// <returns></returns>
-    [HttpGet("getOrderLine")]
+    [HttpGet("getOrderLines")]
     public async Task<IEnumerable<GetOrderLineListDTO>> GetAllOrderLines()
     {
-        return (await OrderLineRepository.GetOrderLines()).Select(x => (GetOrderLineListDTO) x);        
+        return (await OrderLineRepository.GetOrderLines()).Select(orderLine => (GetOrderLineListDTO) orderLine);        
     }
 
     /// <summary>
