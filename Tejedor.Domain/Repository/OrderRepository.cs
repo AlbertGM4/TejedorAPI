@@ -33,6 +33,12 @@ namespace Tejedor.Infrastructure.Repository
             await _dbContext.SaveChangesAsync();
         }
 
+        async Task IOrderRepository.AddOrder(Order order)
+        {
+            _dbContext.Orders.AddRange(order);
+            await _dbContext.SaveChangesAsync();
+        }
+
         async Task IOrderRepository.UpdateOrders(IEnumerable<Order> orders)
         {
             _dbContext.Orders.UpdateRange(orders);

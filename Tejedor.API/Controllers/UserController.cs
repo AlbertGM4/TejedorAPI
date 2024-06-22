@@ -55,7 +55,7 @@ public class UserController : ControllerBase
     [HttpPost("addUsers")]
     public async Task<IActionResult> AddUsers([FromBody] IEnumerable<SetUserListDTO> usersDtos)
     {
-        var userEntities = usersDtos.Select(dto => (User)dto).ToList(); ;
+        var userEntities = usersDtos.Select(dto => (User)dto).ToList();
         await UserRepository.AddUsers(userEntities);
         return CreatedAtAction(nameof(GetAllUsers), null);
     }
@@ -63,12 +63,24 @@ public class UserController : ControllerBase
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="userDto"></param>
+    [HttpPost("addUser")]
+    public async Task<IActionResult> AddUser([FromBody] SetUserListDTO userDto)
+    {
+        var userEntity = (User)userDto;
+        await UserRepository.AddUser(userEntity);
+        return CreatedAtAction(nameof(GetAllUsers), null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="userID"></param>
-    [HttpPut("updateUser/{userID}")]
-    public async Task<IActionResult> UpdateUser([FromRoute] int userID, [FromBody] GetUserListDTO updateUserDto)
+    [HttpPut("updateUser")]
+    public async Task<IActionResult> UpdateUser([FromHeader] string Authorization, [FromBody] SetUserListDTO updateUserDto)
     {
         // Encuentra el usuario en la base de datos
-        var user = await UserRepository.GetUser(userID);
+        var user = await UserRepository.GetUser(Authorization);
 
         if (user == null)
         {
@@ -82,7 +94,6 @@ public class UserController : ControllerBase
         user.Address = updateUserDto.Address ?? user.Address;
         user.BillingAddress = updateUserDto.BillingAddress ?? user.BillingAddress;
         user.Phone = updateUserDto.Phone ?? user.Phone;
-        user.ACoins = updateUserDto.ACoins.HasValue ? updateUserDto.ACoins.Value : user.ACoins;
 
         // Guarda los cambios en la base de datos
         var result = await UserRepository.UpdateUser(user);

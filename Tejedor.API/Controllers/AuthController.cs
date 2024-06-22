@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Tejedor.Infrastructure.DTO.CategoryDTO;
-using Tejedor.Infrastructure.DTO.LoginDTO;
+using Tejedor.Infrastructure.DTO.AuthDTO;
 using Tejedor.Infrastructure.Entity;
-using Tejedor.Infrastructure.Repository;
 using Tejedor.Infrastructure.Repository.Interfaces;
 
 
@@ -48,7 +45,7 @@ public class AuthController : ControllerBase
         catch
         {
             return StatusCode(500, new { message = "Internal server error" });
-        }    
+        }
     }
 
     private string GenerateJwtToken(User user)
@@ -69,4 +66,30 @@ public class AuthController : ControllerBase
         return tokenHandler.WriteToken(token);
     }
 
+    [HttpPost("register")]
+    public async Task<IActionResult> RegisterUser([FromBody] RegisterDTO userInfo)
+    {
+        try
+        {
+            var newUser = await _userRepository.RegisterUser(
+                    userInfo.UserName, userInfo.UserPassword, userInfo.UserEmail,
+                    userInfo.Address, userInfo.BillingAddress, userInfo.Phone
+                    );
+
+            if (newUser == null)
+            {
+                return Unauthorized(new { message = "Invalid username or password" });
+            };
+
+            var userCredentials = (LoginDTO)newUser;
+            var logged = await LoginUser(userCredentials);
+
+
+            return logged;
+        }
+        catch
+        {
+            return StatusCode(500, new { message = "Internal server error" });
+        }
+    }
 }

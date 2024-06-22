@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Tejedor.Infrastructure.DTO.OrderDTO;
 using Tejedor.Infrastructure.Entity;
 using Tejedor.Infrastructure.Repository;
@@ -53,6 +54,29 @@ public class OrderController : ControllerBase
         var orderEntities = orders.Select(dto => (Order)dto).ToList();
         await OrderRepository.AddOrders(orderEntities);
         return CreatedAtAction(nameof(GetAllOrders), null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="orderDto"></param>
+    [HttpPost("addOrder")]
+    public async Task<IActionResult> AddOrder([FromBody] SetOrderListDTO orderDto)
+    {
+        try
+        {
+            var orderEntity = (Order)orderDto;
+            
+            // Guardar la orden usando el repositorio de órdenes
+            await OrderRepository.AddOrder(orderEntity);
+
+            return CreatedAtAction(nameof(GetAllOrders), null); // 201 Created
+        }
+        catch (Exception ex)
+        {
+            // Manejar cualquier error y devolver un estado apropiado
+            return StatusCode(500, $"Error al agregar la orden: {ex.Message}");
+        }
     }
 
     /// <summary>

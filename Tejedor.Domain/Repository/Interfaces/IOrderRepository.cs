@@ -29,6 +29,12 @@ public interface IOrderRepository
     public Task AddOrders(IEnumerable<Order> orders);
 
     /// <summary>
+    ///     It adds all the orders in the IEnumerable into the database
+    /// </summary>
+    /// <param name="order"></param>
+    public Task AddOrder(Order order);
+
+    /// <summary>
     ///     It updates all the orders in the IEnumerable that 
     ///     are in the database
     /// </summary>

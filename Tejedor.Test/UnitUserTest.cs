@@ -30,8 +30,8 @@ public class UserTests
         // Arrange
         var users = new List<User>
         {
-            new User { UserID = 1, UserName = "John", UserEmail = "john@example.com" },
-            new User { UserID = 2, UserName = "Jane", UserEmail = "jane@example.com" }
+            new User { UserID = 1, UserName = "John", UserPassword="123", UserEmail = "john@example.com" },
+            new User { UserID = 2, UserName = "Jane", UserPassword = "321", UserEmail = "jane@example.com" }
         };
         _mockRepo.Setup(repo => repo.GetUsers()).ReturnsAsync(users);
 
