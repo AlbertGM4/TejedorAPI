@@ -10,12 +10,11 @@ namespace Tejedor.Infrastructure.DTO.OrderLineDTO;
 
 public class GetOrderLineListDTO
 {
-    public required int OrderLineID { get; set; }
-    public int Qty { get; set; }
-    public float Tax { get; set; }
-    public float Discount { get; set; }
-    public float SubTotal { get; set; }
-    public float Total { get; set; }
+    public required int Qty { get; set; }
+    public decimal? Tax { get; set; }
+    public decimal? Discount { get; set; }
+    public required decimal SubTotal { get; set; }
+    public required decimal Total { get; set; }
     public required int OrderID { get; set; }
     public required int ProductID { get; set; }
 
@@ -23,7 +22,6 @@ public class GetOrderLineListDTO
     {
         return new GetOrderLineListDTO()
         {
-            OrderLineID = orderLine.OrderLineID,
             Qty = orderLine.Qty,
             Tax = orderLine.Tax,
             Discount = orderLine.Discount,
@@ -36,11 +34,11 @@ public class GetOrderLineListDTO
 }
 public class SetOrderLineListDTO
 {
-    public int Qty { get; set; }
-    public float Tax { get; set; }
-    public float Discount { get; set; }
-    public float SubTotal { get; set; }
-    public float Total { get; set; }
+    public required int Qty { get; set; }
+    public decimal? Tax { get; set; }
+    public decimal? Discount { get; set; }
+    public required decimal SubTotal { get; set; }
+    public required decimal Total { get; set; }
     public required int OrderID { get; set; }
     public required int ProductID { get; set; }
 

@@ -52,7 +52,7 @@ public class OrderLineController : ControllerBase
     {
         var orderLineEntities = orderLines.Select(dto => (OrderLine)dto).ToList();
         await OrderLineRepository.AddOrderLines(orderLineEntities);
-        return CreatedAtAction(nameof(GetAllOrderLines), null);
+        return Ok();
     }
 
     /// <summary>

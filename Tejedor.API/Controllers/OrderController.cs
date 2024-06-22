@@ -70,7 +70,7 @@ public class OrderController : ControllerBase
             // Guardar la orden usando el repositorio de órdenes
             await OrderRepository.AddOrder(orderEntity);
 
-            return CreatedAtAction(nameof(GetAllOrders), null); // 201 Created
+            return Ok(orderEntity.OrderID);
         }
         catch (Exception ex)
         {
