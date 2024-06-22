@@ -11,12 +11,12 @@ namespace Tejedor.Infrastructure.DTO.PromotionDTO;
 public class GetPromotionListDTO
 {
     public int PromotionID { get; set; }
-    public int Code { get; set; }
-    public string? Description { get; set; }
-    public float Discount { get; set; }
-    public DateTime ExpirationDate { get; set; }
-    public int MaxUses { get; set; }
-    public int UsesCount { get; set; }
+    public required int Code { get; set; }
+    public required string Description { get; set; }
+    public required decimal Discount { get; set; }
+    public DateTime? ExpirationDate { get; set; }
+    public int? MaxUses { get; set; }
+    public int? UsesCount { get; set; }
 
     public static explicit operator GetPromotionListDTO(Promotion promotion)
     {
@@ -36,11 +36,11 @@ public class GetPromotionListDTO
 public class SetPromotionListDTO
 {
     public int Code { get; set; }
-    public string? Description { get; set; }
-    public float Discount { get; set; }
-    public DateTime ExpirationDate { get; set; }
-    public int MaxUses { get; set; }
-    public int UsesCount { get; set; }
+    public required string Description { get; set; }
+    public required decimal Discount { get; set; }
+    public DateTime? ExpirationDate { get; set; }
+    public int? MaxUses { get; set; }
+    public int? UsesCount { get; set; }
 
     public static explicit operator Promotion(SetPromotionListDTO promotionDto)
     {
