@@ -8,16 +8,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
-/*
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigin",
         builder => builder
+            .WithOrigins("https://gentle-moss-02dd5de03.5.azurestaticapps.net")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()); // Permitir credenciales
 });
-*/
+
 
 // Cargar configuración desde appsettings.json o configuración de entorno
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -34,8 +35,6 @@ builder.Services.AddDbContext<TejedorDBContext>(options =>
     // To use string connection (appsettings.json) and put migrations on "Tejedor.API"
     options.UseSqlServer(builder.Configuration.GetConnectionString("TejedorConnection"), options => options.MigrationsAssembly("Tejedor.API"));
 });
-
-
 
 
 // Service Injection
@@ -84,6 +83,7 @@ using (var scope = app.Services.CreateScope())
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerUI();
@@ -92,13 +92,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-/*
-app.UseCors(options =>
+
+if (!app.Environment.IsDevelopment())
 {
-    options.AllowAnyMethod(); // Permitir cualquier método HTTP
-    options.AllowAnyHeader(); // Permitir cualquier encabezado HTTP
-});
-*/
+    app.UseCors("AllowOrigin");
+}
+
 
 app.UseAuthentication(); // Añadir autenticación
 // app.UseAuthorization();
