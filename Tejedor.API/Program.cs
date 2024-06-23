@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
+/*
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigin",
@@ -16,6 +17,7 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowCredentials()); // Permitir credenciales
 });
+*/
 
 // Cargar configuración desde appsettings.json o configuración de entorno
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -90,11 +92,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+/*
 app.UseCors(options =>
 {
     options.AllowAnyMethod(); // Permitir cualquier método HTTP
     options.AllowAnyHeader(); // Permitir cualquier encabezado HTTP
 });
+*/
 
 app.UseAuthentication(); // Añadir autenticación
 // app.UseAuthorization();
