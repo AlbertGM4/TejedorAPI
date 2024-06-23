@@ -24,7 +24,12 @@ namespace Tejedor.Infrastructure.Repository
 
         async Task<Product?> IProductRepository.GetProduct(int productID)
         {
-            return await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == productID);
+            return await _dbContext.Products.FirstOrDefaultAsync(product => product.ProductID == productID);
+        }
+
+        async Task<Product?> IProductRepository.SearchProduct(string productName)
+        {
+            return await _dbContext.Products.FirstOrDefaultAsync(product => product.Name.Contains(productName));
         }
 
         async Task IProductRepository.AddProducts(IEnumerable<Product> products)

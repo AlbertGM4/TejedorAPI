@@ -23,6 +23,13 @@ public interface IProductRepository
     public Task<Product?> GetProduct(int productID);
 
     /// <summary>
+    ///     It search for a product by the ID in the parameters
+    /// </summary>
+    /// <param name="productID"> Id of the prodcut to search </param>
+    /// <returns> Return the Product, if not, returns null </returns>
+    public Task<Product?> SearchProduct(string productName);
+
+    /// <summary>
     ///     It adds all the products in the IEnumerable into the database
     /// </summary>
     /// <param name="products"></param>

@@ -12,7 +12,6 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigin",
         builder => builder
-            .WithOrigins("http://localhost:3000") // Reemplaza con el origen de tu frontend
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()); // Permitir credenciales
@@ -93,7 +92,6 @@ app.UseHttpsRedirection();
 
 app.UseCors(options =>
 {
-    options.WithOrigins("http://localhost:3000"); // Permitir cualquier origen (no recomendado para producción)
     options.AllowAnyMethod(); // Permitir cualquier método HTTP
     options.AllowAnyHeader(); // Permitir cualquier encabezado HTTP
 });

@@ -46,6 +46,18 @@ public class ProductController : ControllerBase
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="productName"></param>
+    /// <returns></returns>
+    [HttpGet("searchProduct/{productName}")]
+    public async Task<ActionResult<GetProductListDTO>> GetProductByName(string productName)
+    {
+        var getProduct = await ProductRepository.SearchProduct(productName);
+        return getProduct != null ? (GetProductListDTO)getProduct : NotFound();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="products"></param>
     [HttpPost("addProducts")]
     public async Task<IActionResult> AddProducts([FromBody] IEnumerable<SetProductListDTO> products)
